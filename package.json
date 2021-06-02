@@ -1,0 +1,26 @@
+{
+  "name": "my_flix",
+  "version": "1.0.0",
+  "description": "movies web application",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "Terrell C Lombardi",
+  "license": "ISC",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TerryL1971/myFlix.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TerryL1971/myFlix/issues"
+  },
+  "homepage": "https://github.com/TerryL1971/myFlix#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  }
+}
