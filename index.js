@@ -1,13 +1,15 @@
-const express = require('express');
+const express = require('express'),
+  morgan = require('morgan');
 const app = express();
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
+app.use(morgan('common'));
 app.use(express.static('public'));
 
-let topMovies = [
+let movies = [
   {
     title: 'Divergent',
     director: 'Neil Burger',
@@ -65,7 +67,7 @@ let topMovies = [
   {
     title: 'Tron: Legacy',
     director: 'Joseph Kosinski',
-    genre: '',
+    genre: 'Sci-Fi',
     year: '2010' 
   }
 ];
@@ -80,7 +82,69 @@ app.get('/documentation', (req, res) => {
 });
 
 app.get('/movies', (req, res) => {
-  res.json(topMovies);
+  res.json(movies);
+});
+
+// Gets the data about a single movie, by title
+
+app.get('/movies/:title', (req, res) => {
+  res.json(movies.find((movie) =>
+    { return movie.title === req.params.title }));
+});
+
+// Gets the data about a single movie, by Director
+
+app.get('/movies/:title/:director', (req, res) => {
+  res.json(movies.find((movie) =>
+    { return movie.director === req.params.director }));
+});
+
+// Gets the data about a single movie, by Genre
+
+app.get('/movies/:title/:director/:genre', (req, res) => {
+  res.json(movies.find((movie) =>
+    { return movie.genre === req.params.genre }));
+});
+
+app.get('/movies/:title/:director/:genre/:year', (req, res) => {
+  res.json(movies.find((movie) =>
+    { return movie.year === req.params.year }));
+});
+
+
+// Adds data for a new movie to our list of movies.
+app.post('/movies', (req, res) => {
+  let newMovie = req.body;
+
+  if (!newMovie.title) {
+    const message = 'Missing title in request body';
+    res.status(400).send(message);
+  } else {
+    movies.push(newMovie);
+    res.status(201).send(newMovie);
+  }
+});
+
+// Deletes a movie from our list by Title
+app.delete('/movies/:title', (req, res) => {
+  let movie = movies.find((movie) => { return movie.title === req.params.title });
+
+  if (movie) {
+    movies = movies.filter((obj) => { return obj.title !== req.params.title });
+    res.status(201).send('movie ' + req.params.title + ' was deleted.');
+  }
+});
+
+// Update the "genre" of a movie by movie title/director genre
+app.put('/movies/:title/:director/:genre', (req, res) => {
+  let movie = movies.find((movie) => { return movie.title === req.params.title });
+
+  if (movie) {
+    movie.classes[req.params.class] = parseInt(req.params.genre);
+    res.status(201).send('movie ' + req.params.title + ' was assigned a genre of ' + req.params.genre + ' in ' + req.params.class);
+  } else {
+    res.status(404).send('movie with the title ' + req.params.title + ' was not found.');
+  }
 });
 
 // listen for requests
