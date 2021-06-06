@@ -101,12 +101,12 @@ app.get('/movies/directors/:director', (req, res) => {
 
 // Gets the data about a single movie, by Genre
 
-app.get('/movies/genre/:genre', (req, res) => {
+app.get('/movies/genres/:genre', (req, res) => {
   res.json(movies.find((movie) =>
     { return movie.genre === req.params.genre }));
 });
 
-app.get('/movies/year/:year', (req, res) => {
+app.get('/movies/years/:year', (req, res) => {
   res.json(movies.find((movie) =>
     { return movie.year === req.params.year }));
 });
