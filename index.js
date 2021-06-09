@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const Models = require('./models.js');
+const passport = require('passport');
+require('./passport');
+
 
 const Movies = Models.Movie;
 const Users = Models.User;
@@ -15,6 +18,8 @@ const express = require('express'),
 const app = express();
 
 app.use(bodyParser.json());
+
+let auth = require('./auth')(app);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -95,8 +100,15 @@ app.get('/documentation', (req, res) => {
   res.sendFile('public/documentation.html', { root: __dirname });
 });
 
-app.get('/movies', (req, res) => {
-  res.json(movies);
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Movies.find()
+    .then((movies) => {
+      res.status(201).json(movies);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('Error: ' + error);
+    });
 });
 
 // Gets the data about a single movie, by title
