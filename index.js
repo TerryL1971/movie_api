@@ -307,9 +307,6 @@ app.delete('/users/:Username', (req, res) => {
     });
 });
 
-
-
-
 // listen for requests
 const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0',() => {
