@@ -1,0 +1,89 @@
+[{
+  "_id": {
+    "$oid": "60bf7e03688717513fa44a41"
+  },
+  "Username": "Terry Lombardi",
+  "Password": "123456789",
+  "Email": "terrell.lombardi@gmail.com",
+  "Birthday": {
+    "$date": "1971-07-17T00:00:00Z"
+  },
+  "FavoriteMovies": [
+    {
+      "$oid": "60bf7c3c688717513fa44a37"
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "60bf7e12688717513fa44a42"
+  },
+  "Username": "Tammy Lombardi",
+  "Password": "1023456789",
+  "Email": "tammy.lombardi@gmail.com",
+  "Birthday": {
+    "$date": "1971-12-03T00:00:00Z"
+  },
+  "FavoriteMovies": []
+},{
+  "_id": {
+    "$oid": "60bf7e25688717513fa44a44"
+  },
+  "Username": "Gunther Lisle",
+  "Password": "1a2s3d4f",
+  "Email": "gunther.lisle@gmail.com",
+  "Birthday": {
+    "$date": {
+      "$numberLong": "-237945600000"
+    }
+  },
+  "FavoriteMovies": []
+},{
+  "_id": {
+    "$oid": "60bf7eee688717513fa44a45"
+  },
+  "Username": "Elena Lisle",
+  "Password": "1y1x2c3v",
+  "Email": "elena.lisle@gmail.com",
+  "Birthday": {
+    "$date": "1979-04-25T00:00:00Z"
+  },
+  "FavoriteMovies": []
+},{
+  "_id": {
+    "$oid": "60bf7ef6688717513fa44a46"
+  },
+  "Username": "Nick Howard",
+  "Password": "howard123",
+  "Email": "nick.howard@yahoo.com",
+  "Birthday": {
+    "$date": {
+      "$numberLong": "-595814400000"
+    }
+  },
+  "FavoriteMovies": []
+},{
+  "_id": {
+    "$oid": "60bf7f0f688717513fa44a47"
+  },
+  "Username": "Sunsan Howard",
+  "Password": "howard987",
+  "Email": "susan.howard@yahoo.com",
+  "Birthday": {
+    "$date": {
+      "$numberLong": "-580867200000"
+    }
+  },
+  "FavoriteMovies": []
+},{
+  "_id": {
+    "$oid": "60c0cf0e70647e7f59392097"
+  },
+  "FavoriteMovies": [],
+  "Username": "TestUserName",
+  "Password": "testpassword123",
+  "Email": "testemail@gmail.com",
+  "Birthday": {
+    "$date": "1971-07-16T23:00:00Z"
+  },
+  "__v": 0
+}]
