@@ -2,17 +2,16 @@ const mongoose = require('mongoose');
 const Models = require('./models.js');
 const passport = require('passport');
 require('./passport');
+
 const { check, validationResult } = require('express-validator');
-
-
 
 const Movies = Models.Movie;
 const Users = Models.User;
 const Genres = Models.Genre;
 const Directors = Models.Director;
 
-mongoose.connect( 'mongodb+srv://TerryL1971:<password>@myflixdb.1lzde.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
-
+mongoose.connect('mongodb+srv://TerryL1971:lombardi1@myFlixDB.1lzde.mongodb.net/myFlixDB?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const bodyParser = require('body-parser');
 
