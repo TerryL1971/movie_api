@@ -10,8 +10,8 @@ const Users = Models.User;
 const Genres = Models.Genre;
 const Directors = Models.Director;
 
-mongoose.connect('mongodb+srv://TerryL1971:lombardi1@myFlixDB.1lzde.mongodb.net/myFlixDB?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
-// mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+//mongoose.connect('mongodb+srv://TerryL1971:lombardi1@myFlixDB.1lzde.mongodb.net/myFlixDB?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const bodyParser = require('body-parser');
 
@@ -116,8 +116,8 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) 
     .catch((error) => {
       console.error(error);
       res.status(500).send('Error: ' + error);
-    });
-});
+    }); 
+}); 
 
 // Gets the data about a single movie, by title
 
