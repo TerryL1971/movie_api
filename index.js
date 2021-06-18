@@ -108,6 +108,7 @@ app.get('/documentation', (req, res) => {
   res.sendFile('public/documentation.html', { root: __dirname });
 });
 
+// re-insert this code in line 111 after 3.6 app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
  app.get('/movies', (req, res) => {
   Movies.find()
     .then((movies) => {
