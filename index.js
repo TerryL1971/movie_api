@@ -21,6 +21,9 @@ const app = express();
 
 app.use(bodyParser.json());
 
+const cors = require('cors');
+app.use(cors());
+
 let auth = require('./auth')(app);
 
 app.use((err, req, res, next) => {
@@ -31,8 +34,7 @@ app.use(morgan('common'));
 app.use(express.static('public'));
 
 
-const cors = require('cors');
-app.use(cors());
+
 
 /* rest of code goes here*/
 
