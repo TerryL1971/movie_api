@@ -109,7 +109,7 @@ app.get('/documentation', (req, res) => {
 });
 
 // re-insert this code in line 111 after 3.6 app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
- app.get('/movies', (req, res) => {
+ app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find()
     .then((movies) => {
       res.status(201).json(movies);
