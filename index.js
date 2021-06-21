@@ -10,6 +10,7 @@ const Users = Models.User;
 const Genres = Models.Genre;
 const Directors = Models.Director;
 
+
 mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const bodyParser = require('body-parser');
