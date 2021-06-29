@@ -264,6 +264,17 @@ app.delete('/users/:Username', (req, res) => {
     });
 });
 
+app.put("/users/:id", async (request, response) => {
+    try {
+        var user = await userModel.findById(request.params.id).exec();
+        user.set(request.body);
+        var result = await user.save();
+        response.send(result);
+    } catch (error) {
+        response.status(500).send(error);
+    }
+});
+
 // listen for requests
 const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0',() => {
