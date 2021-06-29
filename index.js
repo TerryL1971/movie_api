@@ -1,30 +1,30 @@
 const mongoose = require('mongoose');
+const express = require('express');
 const Models = require('./models.js');
 const passport = require('passport');
 require('./passport');
 
+
 const { check, validationResult } = require('express-validator');
-
-const Movies = Models.Movie;
-const Users = Models.User;
-const Genres = Models.Genre;
-const Directors = Models.Director;
-
-
-mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const bodyParser = require('body-parser');
 
-const express = require('express'),
-  morgan = require('morgan');
+morgan = require('morgan');
 const app = express();
 
 app.use(bodyParser.json());
+
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const cors = require('cors');
 app.use(cors());
 
 let auth = require('./auth')(app);
+
+const Movies = Models.Movie;
+const Users = Models.User;
+const Genres = Models.Genre;
+const Directors = Models.Director;
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -32,8 +32,6 @@ app.use((err, req, res, next) => {
 });
 app.use(morgan('common'));
 app.use(express.static('public'));
-
-
 
 
 /* rest of code goes here*/
@@ -111,37 +109,69 @@ app.get('/documentation', (req, res) => {
 });
 
 // re-insert this code in line 111 after 3.6 app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
- app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
+ // Return all movies
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find()
-    .then((movies) => {
-      res.status(201).json(movies);
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).send('Error: ' + error);
-    }); 
-}); 
+  .then((movies) => {
+    res.status(201).json(movies);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
+});
 
-// Gets the data about a single movie, by title
+// gets data about a specific movie
+app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Movies.findOne({ Title : req.params.Title }).then((movie) => {
+    res.status(201).json(movie);
+  }).catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err)
+  });
+});
 
-app.get('/movies/:title', (req, res) => {
+// Gets the data about a single movie, by Genre
+app.get('/movies/genres/:genre', (req, res) => {
   res.json(movies.find((movie) =>
-    { return movie.title === req.params.title }));
+    { return movie.genre === req.params.genre }));
+});
+
+// return data about genre
+app.get('/movies/genres/genre/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Genres.findOne({ 'Genre.Name' : req.params.Name })
+  .then((genre) => {
+    res.status(201).json(genre.Genre);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
+});
+
+// get all directors
+app.get('/movies/directors', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Movies.find({ Name : req.params.Name}).then((director) => {
+    res.status(201).json(director.Director);
+  }).catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err)
+  });
 });
 
 // Gets the data about a single movie, by Director
-
 app.get('/movies/directors/:director', (req, res) => {
   res.json(movies.find((movie) =>
     { return movie.director === req.params.director }));
 });
 
-// Gets the data about a single movie, by Genre
-
-app.get('/movies/genres/:genre', (req, res) => {
-  res.json(movies.find((movie) =>
-    { return movie.genre === req.params.genre }));
+// get director by name
+app.get('/movies/directors/:name', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Movies.findOne({'Director.Name' : req.params.name})
+  .then(director => res.status(201).json(director.Director))
+  .catch(err => res.status(500).send('Error: ' + err));
 });
+
 
 app.get('/movies/years/:year', (req, res) => {
   res.json(movies.find((movie) =>
@@ -185,52 +215,49 @@ app.put('/movies/:title/:director/:genre', (req, res) => {
 });
 
 //Add a user
-app.post('/users',
-  // Validation logic here for request
-  //you can either use a chain of methods like .not().isEmpty()
-  //which means "opposite of isEmpty" in plain english "is not empty"
-  //or use .isLength({min: 5}) which means
-  //minimum value of 5 characters are only allowed
-  [
-    check('Username', 'Username is required').isLength({min: 5}),
-    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
-    check('Password', 'Password is required').not().isEmpty(),
-    check('Email', 'Email does not appear to be valid').isEmail()
-  ], (req, res) => {
-
-  // check the validation object for errors
-    let errors = validationResult(req);
+// Register a new user
+app.post('/users', [
+check('Username', 'Check - Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
+check('Username', 'Username is required').isLength({min: 5}),
+check('Password', 'Password is required').not().isEmpty(),
+check('Email', 'Email does not appear to be valid').isEmail()
+], 
+(req, res) => {
+  // check validation object for errors
+  let errors = validationResult(req);
 
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
 
-    let hashedPassword = Users.hashPassword(req.body.Password);
-    Users.findOne({ Username: req.body.Username }) // Search to see if a user with the requested username already exists
-      .then((user) => {
-        if (user) {
-          //If the user is found, send a response that it already exists
-          return res.status(400).send(req.body.Username + ' already exists');
-        } else {
-          Users
-            .create({
-              Username: req.body.Username,
-              Password: hashedPassword,
-              Email: req.body.Email,
-              Birthday: req.body.Birthday
-            })
-            .then((user) => { res.status(201).json(user) })
-            .catch((error) => {
-              console.error(error);
-              res.status(500).send('Error: ' + error);
-            });
-        }
+  let hashedPassword = Users.hashPassword(req.body.Password);
+  Users.findOne({ Username: req.body.Username })
+  // search to see if user with requested username already exists
+  .then((user) => {
+    if (user) {
+      // if user is found, send a response that it already exists
+      return res.status(400).send(req.body.Username + 'already exists');
+    } else {
+      Users.create({
+        Username: req.body.Username,
+        Password: hashedPassword,
+        Email: req.body.Email,
+        Birthday: req.body.Birthday
+      })
+      .then((user) => { 
+        res.status(201).json(user);
       })
       .catch((error) => {
         console.error(error);
         res.status(500).send('Error: ' + error);
-      });
+      })
+    }
+  })
+  .catch((error) => {
+    console.error(error);
+    res.status(500).send('Error: ' + error);
   });
+});
 
 // get all users
 app.get('/users', 
