@@ -264,7 +264,8 @@ app.delete('/users/:Username', (req, res) => {
     });
 });
 
-app.put("/users/:id", async (request, response) => {
+// Update a user
+app.put("/users/Username/:id", async (request, response) => {
     try {
         var user = await userModel.findById(request.params.id).exec();
         user.set(request.body);
