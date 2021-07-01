@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const express = require('express');
 const Models = require('./models.js');
 const passport = require('passport');
+const dotenv = require('dotenv');
+dotenv.config()
 require('./passport');
 
 
@@ -165,18 +167,18 @@ app.get('/movies/directors/:director', (req, res) => {
     { return movie.director === req.params.director }));
 });
 
-// get director by name
-app.get('/movies/directors/:name', passport.authenticate('jwt', { session: false }), (req, res) => {
+// Get director by name
+app.get('/movies/directors/director/:name', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.findOne({'Director.Name' : req.params.name})
   .then(director => res.status(201).json(director.Director))
   .catch(err => res.status(500).send('Error: ' + err));
 });
 
-
+/*
 app.get('/movies/years/:year', (req, res) => {
   res.json(movies.find((movie) =>
     { return movie.year === req.params.year }));
-});
+}); */
 
 
 // Adds data for a new movie to our list of movies.
@@ -286,13 +288,7 @@ app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (r
   });
 });
 
-// update existing user info
-// [
-// check('Username', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
-// check('Username', 'Username is required').isLength({min: 5}),
-// check('Password', 'Password is required').not().isEmpty(),
-// check('Email', 'Email does not appear to be valid').isEmail()],
-
+// Update existing user information
 app.put('/users/:Username', passport.authenticate('jwt', { session: false }),  (req, res) => {
   // check validation object for errors
   let errors = validationResult(req);
