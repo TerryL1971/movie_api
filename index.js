@@ -37,7 +37,7 @@ app.use(express.static('public'));
 
 
 /* rest of code goes here*/
-
+/*
 let movies = [
   {
     title: 'Divergent',
@@ -99,7 +99,7 @@ let movies = [
     genre: 'Sci-Fi',
     year: '2010' 
   }
-]; 
+]; */
 
 // GET requests
 app.get('/', (req, res) => {
