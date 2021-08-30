@@ -1,6 +1,8 @@
 # Movie API
 RESTful API that fetches data about movies, directors, and genres from a MongoDB database.
 
+![myFlix](./public/img/myFlix.gif)
+
 
 ## Description
 This App loads data from an external API and enables the viewing of data points in detail.
