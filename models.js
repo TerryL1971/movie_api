@@ -5,6 +5,10 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
+/** @constant
+ * @name movieSchema
+ * @description mongoose movies schema
+ */
 let movieSchema = mongoose.Schema({
     Title: {type: String, required: true},
     Descripton: {type: String, required: true},
@@ -21,6 +25,10 @@ let movieSchema = mongoose.Schema({
     Featured: Boolean
 });
 
+/** @constant
+ * @name userSchema
+ * @description mongoose users schemajsdoc models.js
+ */
 let userSchema = mongoose.Schema({
     Username: {type: String, required: true},
     Password: {type: String, required: true},

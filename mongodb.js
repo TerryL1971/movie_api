@@ -481,5 +481,5 @@ FavoriteMovies: {
     "Birth": "1974"
   },
 
-  "ImagePath": "https://www.imdb.com/title/tt1104001/mediaviewer/rm3240068608/"
+  "ImagePath": "https://www.imdb.com/title/tt1104001/mediaviewer/rm3240068608/",
 }

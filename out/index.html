@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,475 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: index.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const mongoose = require('mongoose');
+const express = require('express');
+const Models = require('./models.js');
+const passport = require('passport');
+const dotenv = require('dotenv');
+dotenv.config()
+require('./passport');
+
+const { check, validationResult } = require('express-validator');
+
+const bodyParser = require('body-parser');
+
+morgan = require('morgan');
+const app = express();
+
+app.use(bodyParser.json());
+
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+const cors = require('cors');
+app.use(cors());
+
+let auth = require('./auth')(app);
+
+const Movies = Models.Movie;
+const Users = Models.User;
+const Genres = Models.Genre;
+const Directors = Models.Director;
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+app.use(morgan('common'));
+app.use(express.static('public'));
 
 
-    <h3> </h3>
+/* rest of code goes here */
+
+let movies = [
+  {
+    title: 'Divergent',
+    director: 'Neil Burger',
+    genre: 'Action',
+    year: '2014'
+  },
+  {
+    title: 'Divergent: Insurgent',
+    director: 'Robert Schwentke',
+    genre: 'Action',
+    year: '2015'
+  },
+  {
+    title: 'Divergent: Allegiant',
+    director: 'Robert Schwentke',
+    genre: 'Action',
+    year: '2016' 
+  },
+  {
+    title: 'Stripes',
+    director: 'Ivan Reitman',
+    genre: 'Comedy',
+    year: '1981'
+  },
+  {
+    title: 'Revenge of the Nerds',
+    director: 'Jeff Kanew',
+    genre: 'Comedy',
+    year: '1984'
+  },
+  {
+    title: 'Ready Player One',
+    director: 'Steven Spielberg',
+    genre: 'Sci-Fi',
+    year: '2018' 
+  },
+   {
+    title: 'Smokey and the Bandit',
+    director: 'Hal Needham',
+    genre: 'Action',
+    year: '1977' 
+  },
+  {
+    title: 'Avatar',
+    director: 'James Cameron',
+    genre: 'Fantasy',
+    year: '2009' 
+  },
+  {
+    title: 'Tron',
+    director: 'Steven Lisberger',
+    genre: 'Sci-Fi',
+    year: '1982'
+  },
+  {
+    title: 'Tron: Legacy',
+    director: 'Joseph Kosinski',
+    genre: 'Sci-Fi',
+    year: '2010' 
+  }
+]; 
+
+// GET requests
+/** @function
+ * @name getMovies
+ * @description 1. Return a list of ALL movies --- //GET /movies
+ * @returns {json} array of all movie objects from database
+ */
+app.get('/', (req, res) => {
+  res.send('Welcome to my movies app!');
+});
+
+app.get('/documentation', (req, res) => {                  
+  res.sendFile('public/documentation.html', { root: __dirname });
+});
+
+// re-insert this code in line 111 after 3.6 app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
+ // Return all movies
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Movies.find()
+  .then((movies) => {
+    res.status(201).json(movies);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
+});
+
+// gets data about a specific movie
+/** @function
+ * @name getMovie
+ * @description  Return data about movie by title --- //GET /movies/[title]
+ * @param {string} id - The movie's ID
+ * @returns {json} movie - movie object from database
+ */
+app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Movies.findOne({ Title : req.params.Title }).then((movie) => {
+    res.status(201).json(movie);
+  }).catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err)
+  });
+});
+
+// Gets the data about a single movie, by Genre
+app.get('/movies/genres/:genre', (req, res) => {
+  res.json(movies.find((movie) =>
+    { return movie.genre === req.params.genre }));
+});
+
+// return data about genre
+/** @function
+ * @name getGenre
+ * @description 3. Return data about a genre (description) by name --- //GET /movies/genres/[name]
+ * @returns {json} movie.Genre - genre data from database
+ */
+app.get('/movies/genres/genre/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Genres.findOne({ 'Genre.Name' : req.params.Name })
+  .then((genre) => {
+    res.status(201).json(genre.Genre);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
+});
+
+// get all directors
+app.get('/movies/directors', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Movies.find({ Name : req.params.Name}).then((director) => {
+    res.status(201).json(director.Director);
+  }).catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err)
+  });
+});
+
+// Gets the data about a single movie, by Director
+app.get('/movies/directors/:director', (req, res) => {
+  res.json(movies.find((movie) =>
+    { return movie.director === req.params.director }));
+});
+
+// Get director by name
+/** @function
+ * @name getDirector
+ * @description 4. Return data about a director (bio, birth year, death year, work) by name --- //GET  /movies/[director]/[name]
+ * @returns {json} movie.Director - director object from database
+ */
+app.get('/movies/directors/director/:name', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Movies.findOne({'Director.Name' : req.params.name})
+  .then(director => res.status(201).json(director.Director))
+  .catch(err => res.status(500).send('Error: ' + err));
+});
+
+/* Potential code for listing the movies year release 
+app.get('/movies/years/:year', (req, res) => {
+  res.json(movies.find((movie) =>
+    { return movie.year === req.params.year }));
+}); */
 
 
+// Adds data for a new movie to our list of movies.
+/** @function
+ * @name registerUser
+ * @description 5. Allow new users to register --- //POST  /users
+ * @param {object} - New user registration data
+ * @returns {json} user object - new registered user's data
+ */
+app.post('/movies', (req, res) => {
+  let newMovie = req.body;
+
+  if (!newMovie.title) {
+    const message = 'Missing title in request body';
+    res.status(400).send(message);
+  } else {
+    movies.push(newMovie);
+    res.status(201).send(newMovie);
+  }
+});
+
+// Deletes a movie from our list by Title
+app.delete('/movies/:title', (req, res) => {
+  let movie = movies.find((movie) => { return movie.title === req.params.title });
+
+  if (movie) {
+    movies = movies.filter((obj) => { return obj.title !== req.params.title });
+    res.status(201).send('movie ' + req.params.title + ' was deleted.');
+  }
+});
+
+// Update the "genre" of a movie by movie title/director genre
+app.put('/movies/:title/:director/:genre', (req, res) => {
+  let movie = movies.find((movie) => { return movie.title === req.params.title });
+
+  if (movie) {
+    movie.classes[req.params.class] = parseInt(req.params.genre);
+    res.status(201).send('movie ' + req.params.title + ' was assigned a genre of ' + req.params.genre + ' in ' + req.params.class);
+  } else {
+    res.status(404).send('movie with the title ' + req.params.title + ' was not found.');
+  }
+});
+
+//Add a user
+// Register a new user
+app.post('/users', [
+check('Username', 'Check - Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
+check('Username', 'Username is required').isLength({min: 5}),
+check('Password', 'Password is required').not().isEmpty(),
+check('Email', 'Email does not appear to be valid').isEmail()
+], 
+(req, res) => {
+  // check validation object for errors
+  let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
+  let hashedPassword = Users.hashPassword(req.body.Password);
+  Users.findOne({ Username: req.body.Username })
+  // search to see if user with requested username already exists
+  .then((user) => {
+    if (user) {
+      // if user is found, send a response that it already exists
+      return res.status(400).send(req.body.Username + 'already exists');
+    } else {
+      Users.create({
+        Username: req.body.Username,
+        Password: hashedPassword,
+        Email: req.body.Email,
+        Birthday: req.body.Birthday
+      })
+      .then((user) => { 
+        res.status(201).json(user);
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send('Error: ' + error);
+      })
+    }
+  })
+  .catch((error) => {
+    console.error(error);
+    res.status(500).send('Error: ' + error);
+  });
+});
+
+// get all users
+/** @function
+ * @name getUser
+ * @description 6. Get user by username  --- //GET /users/[username]
+ * @param {string} Username - The user's username
+ * @returns {json} user object - specific user from database
+ */
+app.get('/users', 
+// passport.authenticate('jwt', { session: false }), 
+(req, res) => {
+  Users.find()
+  .then((users) => {
+    res.status(201).json(users);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
+});
+
+// Get a user by username
+app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
+  // to "read" a user by username, pass an object that contains that criteria ("username")
+  Users.findOne({ Username: req.params.Username })
+  .then((users) => {
+    res.json(users);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
+});
+
+// Update existing user information
+/** @function
+ * @name updateUser
+ * @description 7. Allow users to update their user info (username) --- //PUT /users/[username]
+ * @param {object} - New updated user data
+ * @param {string} Username - The user's username
+ * @returns {json} user object - updated user data
+ */
+app.put('/users/:Username', passport.authenticate('jwt', { session: false }),  (req, res) => {
+  // check validation object for errors
+  let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    };
+
+    // Hash the submitted password
+    let hashedPassword = Users.hashPassword(req.body.Password);
+    let updateObject = {}
+    if (req.body.Username) {
+      updateObject.Username = req.body.Username
+    }
+    if (req.body.Password) {
+      updateObject.Password = req.body.Password
+    }
+    if (req.body.Email) {
+      updateObject.Email = req.body.Email
+    }
+    if (req.body.Birthday) {
+      updateObject.Birthday = req.body.Birthday
+    }
+
+  Users.findOneAndUpdate({ Username: req.params.Username }, { $set: updateObject },
+  { new: true }, // This line makes sure that the updated document is returned
+  (err, updatedUser) => {
+    if(err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+    }
+  });
+});
 
 
+// Add movie to user's favorites list
+/** @function
+ * @name addFavoriteMovie
+ * @description 8. Allow users to add a movie to their list of favorites --- //POST /users/[username]/favorites
+ * @param {string} Username - The user's username
+ * @returns {json} user object
+ */
+app.post('/users/:Username/Movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.Username }, {
+    // adds movie onto end of array of FavoriteMovies
+    $push: { FavoriteMovies: req.params.MovieID }
+  },
+  { new: true },
+  (err, updatedUser) => {
+    if(err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+    }
+  });
+});
 
 
+// Removes movie from favorites list
+/** @function
+ * @name deleteFavorite
+ * @description 9. Allow users to remove a movie from their list of favorites --- //DELETE	/users/[username]/favorites
+ * @param {string} Username - The user's username
+ * @returns {json} favorite movies object
+ */
+app.delete('/users/:Username/Movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.Username }, {
+    $pull: { FavoriteMovies: req.params.MovieID }
+  },
+  { new: true },
+  (err, updatedUser) => {
+    if(err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+    }
+  });
+});
 
 
+// Add a movie to a user's list of favorites
+app.post('/users/:Username/Movies/:MovieID', (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.Username }, {
+     $push: { FavoriteMovies: req.params.MovieID }
+   },
+   { new: true }, // This line makes sure that the updated document is returned
+  (err, updatedUser) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+    }
+  });
+});
+
+// Delete a user by username
+/** @function
+ * @name deleteUser
+ * @description 10. Allow existing users to deregister --- //DELETE	/users/[username]
+ * @param {string} Username - The user's username
+ * @returns {string} - confirmation of the user's deletion
+ */
+app.delete('/users/:Username', (req, res) => {
+  Users.findOneAndRemove({ Username: req.params.Username })
+    .then((user) => {
+      if (!user) {
+        res.status(400).send(req.params.Username + ' was not found');
+      } else {
+        res.status(200).send(req.params.Username + ' was deleted.');
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
 
 
-    
-
-
-
-
-
+// listen for requests
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0',() => {
+ console.log('Listening on Port ' + port);
+});</code></pre>
+        </article>
+    </section>
 
 
 
@@ -50,13 +493,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addFavoriteMovie">addFavoriteMovie</a></li><li><a href="global.html#deleteFavorite">deleteFavorite</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#getDirector">getDirector</a></li><li><a href="global.html#getGenre">getGenre</a></li><li><a href="global.html#getMovie">getMovie</a></li><li><a href="global.html#getMovies">getMovies</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Aug 30 2021 13:03:29 GMT+0200 (Central European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Aug 30 2021 15:46:58 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>
