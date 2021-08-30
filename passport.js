@@ -1,3 +1,6 @@
+/** 
+* Defining the secured login for users.
+*/
 const passport = require('passport'),
   LocalStrategy = require('passport-local').Strategy,
   Models = require('./models.js'),

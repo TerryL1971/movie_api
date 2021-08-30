@@ -1,3 +1,6 @@
+/**
+*
+*/
 const mongoose = require('mongoose');
 const express = require('express');
 const Models = require('./models.js');
@@ -36,7 +39,7 @@ app.use(morgan('common'));
 app.use(express.static('public'));
 
 
-/* rest of code goes here*/
+/* rest of code goes here */
 
 let movies = [
   {
@@ -174,7 +177,7 @@ app.get('/movies/directors/director/:name', passport.authenticate('jwt', { sessi
   .catch(err => res.status(500).send('Error: ' + err));
 });
 
-/*
+/* Potential code for listing the movies year release 
 app.get('/movies/years/:year', (req, res) => {
   res.json(movies.find((movie) =>
     { return movie.year === req.params.year }));

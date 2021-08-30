@@ -1,3 +1,7 @@
+/** 
+* This is the intial MongoDB items.
+* Other movies can be added later.
+*/
 let movie1 = {
   Title: "Divergent",
   Description: "In a world divided by factions based on virtues, Tris learns she is Divergent and will not fit in.",
@@ -323,10 +327,10 @@ FavoriteMovies: {
     "Birth": "1963"
   },
 
-  "ImagePath": "https://www.imdb.com/title/tt1840309/mediaviewer/rm2855260672/"
-}
+  "ImagePath": "https://www.imdb.com/title/tt1840309/mediaviewer/rm2855260672/",
 
-FavoriteMovies: {
+
+
   FavoriteMovieID: movie2 = {
   "Title":"Divergent: Insurgent",
   "Description": "Beatrice Prior must confront her inner demons and continue her fight against a powerful alliance which threatens to tear her society apart with the help from others on her side.",
@@ -340,10 +344,10 @@ FavoriteMovies: {
     "Birth": "1968"
   },
 
-  "ImagePath": "https://www.imdb.com/title/tt2908446/mediaviewer/rm3605394176/"
-}
+  "ImagePath": "https://www.imdb.com/title/tt2908446/mediaviewer/rm3605394176/",
 
-FavoriteMovies: {
+
+
   FavoriteMovieID: movie3 = {
   "Title":"Divergent: Allegiant",
   "Description": "After the earth-shattering revelations of Insurgent, Tris must escape with Four beyond the wall that encircles Chicago, to finally discover the shocking truth of the world around them.",
@@ -357,10 +361,10 @@ FavoriteMovies: {
     "Birth": "1968"
   },
 
-  "ImagePath": "https://www.imdb.com/title/tt3410834/mediaviewer/rm4079491328/"
-}
+  "ImagePath": "https://www.imdb.com/title/tt3410834/mediaviewer/rm4079491328/",
 
-FavoriteMovies: {
+
+
   FavoriteMovieID: movie4 = {
   "Title":"Stripes",
   "Description": "Two friends who are dissatisfied with their jobs decide to join the army for a bit of fun.",
@@ -374,10 +378,10 @@ FavoriteMovies: {
     "Birth": "1946"
   },
 
-  "ImagePath": "https://www.imdb.com/title/tt0083131/mediaviewer/rm2065750272/"
-}
+  "ImagePath": "https://www.imdb.com/title/tt0083131/mediaviewer/rm2065750272/",
 
-FavoriteMovies: {
+
+
   FavoriteMovieID: movie5 = {
   "Title":"Revenge of the Nerds",
   "Description": "At Adams College, a group of bullied outcasts and misfits resolve to fight back for their peace and self-respect.",
@@ -391,10 +395,10 @@ FavoriteMovies: {
     "Birth": "1944"
   },
 
-  "ImagePath": "https://www.imdb.com/title/tt0088000/mediaviewer/rm878498816/"
-}
+  "ImagePath": "https://www.imdb.com/title/tt0088000/mediaviewer/rm878498816/",
 
-FavoriteMovies: {
+
+
   FavoriteMovieID: movie6 = {
   "Title":"Ready Player One",
   "Description": "When the creator of a virtual reality called the OASIS dies, he makes a posthumous challenge to all OASIS users to find his Easter Egg, which will give the finder his fortune and control of his world.",
@@ -408,10 +412,10 @@ FavoriteMovies: {
     "Birth": "1946"
   },
 
-  "ImagePath": "https://www.imdb.com/title/tt1677720/mediaviewer/rm4286860032/"
-}
+  "ImagePath": "https://www.imdb.com/title/tt1677720/mediaviewer/rm4286860032/",
 
-FavoriteMovies: {
+
+
   FavoriteMovieID: movie7 = {
   "Title":"Smokey and the Bandit",
   "Description": "The Bandit is hired on to run a tractor-trailer full of beer over state lines, in hot pursuit by a pesky sheriff.",
@@ -426,10 +430,10 @@ FavoriteMovies: {
     "Death": "2013"
   },
 
-  "ImagePath": "https://www.imdb.com/title/tt0076729/mediaviewer/rm534644480/"
-}
+  "ImagePath": "https://www.imdb.com/title/tt0076729/mediaviewer/rm534644480/",
 
-FavoriteMovies: {
+
+
   FavoriteMovieID: movie8 = {
   "Title":"Avatar",
   "Description": "A paraplegic Marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.",
@@ -443,10 +447,10 @@ FavoriteMovies: {
     "Birth": "1954"
   },
 
-  "ImagePath": "https://www.imdb.com/title/tt0499549/mediaviewer/rm843615744/"
-}
+  "ImagePath": "https://www.imdb.com/title/tt0499549/mediaviewer/rm843615744/",
 
-FavoriteMovies: {
+
+
   FavoriteMovieID: movie9 = {
   "Title":"Tron",
   "Description": "A computer hacker is abducted into the digital world and forced to participate in gladiatorial games where his only chance of escape is with the help of a heroic security program.",
@@ -460,10 +464,10 @@ FavoriteMovies: {
     "Birth": "1951"
   },
 
-  "ImagePath": "https://www.imdb.com/title/tt0084827/mediaviewer/rm3173463040/"
-}
+  "ImagePath": "https://www.imdb.com/title/tt0084827/mediaviewer/rm3173463040/",
 
-FavoriteMovies: {
+
+
   FavoriteMovieID: movie10 = {
   "Title":"Tron: Legacy",
   "Description": "The son of a virtual world designer goes looking for his father and ends up inside the digital world that his father designed. He meets his fathers corrupted creation and a unique ally who was born inside the digital world.",
